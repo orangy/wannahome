@@ -1,8 +1,16 @@
 import androidx.compose.desktop.ui.tooling.preview.*
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.layout.*
+import androidx.compose.ui.unit.*
 import androidx.compose.ui.window.*
+import com.seiko.imageloader.*
+import com.seiko.imageloader.component.*
+import com.seiko.imageloader.model.*
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
@@ -15,6 +23,8 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.*
+import okio.Path.Companion.toOkioPath
+import java.io.*
 
 val httpClient = HttpClient(CIO) {
     install(ContentEncoding) {
@@ -73,9 +83,19 @@ fun App() {
 
     MaterialTheme {
         items?.let { items ->
-            LazyColumn {
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 items(items.realStateItemModel) { item ->
                     Text(text = item.title)
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        item.appImages.forEach { image ->
+                            Image(
+                                rememberImagePainter(image.fileName),
+                                contentDescription = "change image",
+                                modifier = Modifier.size(100.dp),
+                                contentScale = ContentScale.Crop,
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -83,7 +103,41 @@ fun App() {
 }
 
 fun main() = application {
-    Window(onCloseRequest = ::exitApplication) {
-        App()
+    Window(
+        onCloseRequest = ::exitApplication,
+        title = ApplicationName
+    ) {
+        CompositionLocalProvider(
+            LocalImageLoader provides remember { generateImageLoader() },
+        ) {
+            App()
+        }
     }
 }
+
+fun generateImageLoader(): ImageLoader = ImageLoader {
+    components {
+        setupDefaultComponents()
+    }
+    interceptor {
+        // cache 100 success image result, without bitmap
+        defaultImageResultMemoryCache()
+        memoryCacheConfig {
+            maxSizeBytes(32 * 1024 * 1024) // 32MB
+        }
+        diskCacheConfig {
+            directory(getCacheDir().toOkioPath().resolve("image_cache"))
+            maxSizeBytes(512L * 1024 * 1024) // 512MB
+        }
+    }
+}
+
+// about currentOperatingSystem, see app
+private fun getCacheDir() = when (currentOperatingSystem) {
+    OperatingSystem.Windows -> File(System.getenv("AppData"), "$ApplicationName/cache")
+    OperatingSystem.Linux -> File(System.getProperty("user.home"), ".cache/$ApplicationName")
+    OperatingSystem.MacOS -> File(System.getProperty("user.home"), "Library/Caches/$ApplicationName")
+    else -> throw IllegalStateException("Unsupported operating system")
+}
+
+private const val ApplicationName = "WannaHome"
