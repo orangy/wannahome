@@ -50,18 +50,18 @@ val query = RealEstateQuery(
     realEstateDealType = 4,
     cityIdList = listOf(95),
     subdistrictIds = listOf(47, 31, 23),
-    areaFrom = 120,
+    areaFrom = 50,
     currencyId = 2,
     priceType = 1,
-    priceFrom = 120000,
-    priceTo = 350000,
-    rooms = listOf(4, 5, 6),
+    priceFrom = 50000,
+    priceTo = 100000,
+    rooms = listOf(2, 3),
     advancedSearch = AdvancedSearch(
         floor = Floor(from = 2),
-        bedrooms = Bedrooms(from = 2)
+        bedrooms = Bedrooms(from = 1)
     ),
-    page = 2,
-    pageSize = 16
+    page = 1,
+    pageSize = 100
 )
 
 @Composable
