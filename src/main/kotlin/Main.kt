@@ -6,6 +6,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.layout.*
+import androidx.compose.ui.text.font.*
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.window.*
 import com.seiko.imageloader.*
@@ -83,17 +84,23 @@ fun App() {
 
     MaterialTheme {
         items?.let { items ->
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            LazyColumn(Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 items(items.realStateItemModel) { item ->
-                    Text(text = item.title)
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        item.appImages.forEach { image ->
-                            Image(
-                                rememberImagePainter(image.fileName),
-                                contentDescription = "change image",
-                                modifier = Modifier.size(100.dp),
-                                contentScale = ContentScale.Crop,
-                            )
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Text(text = item.title, fontWeight = FontWeight.Bold)
+                        Text(text = "${item.price.priceUsd}$")
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            item.appImages.forEach { image ->
+                                Image(
+                                    rememberImagePainter(image.fileName),
+                                    contentDescription = "change image",
+                                    modifier = Modifier.size(100.dp),
+                                    contentScale = ContentScale.Crop,
+                                )
+                            }
+                        }
+                        item.description?.let {
+                            Text(text = it)
                         }
                     }
                 }
