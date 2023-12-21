@@ -91,7 +91,7 @@ fun App() {
             ) {
                 items(items.realStateItemModel) { item ->
                     Column(
-                        Modifier.fillMaxWidth().clip(RoundedCornerShape(4.dp)).background(MaterialTheme.colorScheme.tertiaryContainer).padding(8.dp),
+                        Modifier.fillMaxWidth().clip(RoundedCornerShape(4.dp)).background(MaterialTheme.colorScheme.surfaceVariant).padding(8.dp),
                         verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         Text(
