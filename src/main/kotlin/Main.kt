@@ -66,11 +66,22 @@ val query = RealEstateQuery(
     pageSize = 100
 )
 
+// https://api-gateway.ss.ge/v1/RealEstate/details?applicationId=28112287&updateViewCount=true
+
+private val json = Json {
+    ignoreUnknownKeys = true
+}
+
 @Composable
 @Preview
 fun App() {
     var items by remember { mutableStateOf<RealEstateResponse?>(null) }
+    var metadata by remember { mutableStateOf<Metadata?>(null) }
     LaunchedEffect(Unit) {
+        val mainPage = httpClient.get("https://home.ss.ge/en/real-estate").bodyAsText()
+        val metadataJson = mainPage.substringAfterLast("<script id=\"__NEXT_DATA__\" type=\"application/json\">")
+            .substringBefore("</script></body></html>")
+        metadata = json.decodeFromString<Metadata>(metadataJson)
         httpClient.post("https://home.ss.ge/api/refresh_access_token").bodyAsText()
         val cookies = httpClient.cookies("https://home.ss.ge")
         val token = cookies["ss-session-token"]
@@ -84,34 +95,45 @@ fun App() {
     }
 
     AppTheme {
-        items?.let { items ->
-            LazyColumn(
-                Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.background).padding(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(items.realStateItemModel) { item ->
-                    Column(
-                        Modifier.fillMaxWidth().clip(RoundedCornerShape(4.dp)).background(MaterialTheme.colorScheme.surfaceVariant).padding(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Text(
-                            text = item.title,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
-                        Text(text = "${item.price.priceUsd}$", color = MaterialTheme.colorScheme.onBackground)
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            item.appImages.forEach { image ->
-                                Image(
-                                    rememberImagePainter(image.fileName),
-                                    contentDescription = "change image",
-                                    modifier = Modifier.size(200.dp).clip(RoundedCornerShape(4.dp)),
-                                    contentScale = ContentScale.Crop,
-                                )
+        Column {
+            metadata?.let { metadata ->
+                Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                    metadata.props.pageProps.locations.visibleCities.forEach {
+                        Text(it.cityTitle)
+                    }
+                }
+            }
+
+            items?.let { items ->
+                LazyColumn(
+                    Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.background).padding(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(items.realStateItemModel) { item ->
+                        Column(
+                            Modifier.fillMaxWidth().clip(RoundedCornerShape(4.dp))
+                                .background(MaterialTheme.colorScheme.surfaceVariant).padding(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Text(
+                                text = item.title,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                            Text(text = "${item.price.priceUsd}$", color = MaterialTheme.colorScheme.onBackground)
+                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                item.appImages.forEach { image ->
+                                    Image(
+                                        rememberImagePainter(image.fileName),
+                                        contentDescription = "change image",
+                                        modifier = Modifier.size(200.dp).clip(RoundedCornerShape(4.dp)),
+                                        contentScale = ContentScale.Crop,
+                                    )
+                                }
                             }
-                        }
-                        item.description?.let {
-                            Text(text = it)
+                            item.description?.let {
+                                Text(text = it)
+                            }
                         }
                     }
                 }
