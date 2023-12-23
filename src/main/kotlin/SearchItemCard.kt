@@ -54,7 +54,7 @@ fun SearchItemCard(item: SearchItem, modifier: Modifier = Modifier) {
                         Text(text = address, color = MaterialTheme.colorScheme.primary)
                     }
                 }
-                Spacer(Modifier.weight(1f))
+                //Spacer(Modifier.weight(1f))
                 Row(
                     Modifier.height(IntrinsicSize.Max).padding(grid * 4, grid * 2).alignByBaseline(),
                     horizontalArrangement = Arrangement.spacedBy(grid * 2)
@@ -75,11 +75,11 @@ fun SearchItemCard(item: SearchItem, modifier: Modifier = Modifier) {
                                 append(" • ")
                             }
                         }
-                        append("${item.floorNumber}/${item.totalAmountOfFloor.toInt()} fl")
+                        append("${item.numberOfBedrooms} bds")
                         withStyle(SpanStyle(color = Color.LightGray)) {
                             append(" • ")
                         }
-                        append("${item.numberOfBedrooms} bds")
+                        append("${item.floorNumber}/${item.totalAmountOfFloor.toInt()} fl")
                     }
 
                     Text(info, color = MaterialTheme.colorScheme.onBackground, overflow = TextOverflow.Ellipsis, maxLines = 1)
@@ -99,7 +99,7 @@ fun SearchItemCard(item: SearchItem, modifier: Modifier = Modifier) {
         }
 
         Text(
-            text = "${String.format("%,d", item.price.priceUsd)}$",
+            text = "\$${String.format("%,d", item.price.priceUsd)}",
             color = MaterialTheme.colorScheme.onBackground,
             style = MaterialTheme.typography.titleLarge
         )
