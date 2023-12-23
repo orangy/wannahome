@@ -59,7 +59,7 @@ data class SearchItem(
     val description: String?,
     val totalArea: Double?,
     val totalAmountOfFloor: Double?,
-    val floorNumber: String,
+    val floorNumber: String?,
     val numberOfBedrooms: Int,
     val type: Int,
     val dealType: Int,

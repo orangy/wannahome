@@ -85,7 +85,7 @@ fun SearchItemCard(item: SearchItem, modifier: Modifier = Modifier) {
                         withStyle(SpanStyle(color = Color.LightGray)) {
                             append(" • ")
                         }
-                        if (item.floorNumber.isNotEmpty() && item.totalAmountOfFloor != null) {
+                        if (!item.floorNumber.isNullOrBlank() && item.totalAmountOfFloor != null) {
                             append("${item.floorNumber}/${item.totalAmountOfFloor.toInt()} fl")
                         }
                     }
@@ -125,6 +125,19 @@ fun SearchItemCard(item: SearchItem, modifier: Modifier = Modifier) {
                 }" else "Negotiable",
                 color = MaterialTheme.colorScheme.onBackground,
                 style = MaterialTheme.typography.titleLarge,
+            )
+            Text(
+                when (item.type) {
+                    1 -> "cottage"
+                    2 -> "hotel"
+                    3 -> "land"
+                    4 -> "house"
+                    5 -> "apartment"
+                    6 -> "commercial"
+                    else -> ""
+                },
+                color = Color.Gray,
+                style = MaterialTheme.typography.titleSmall,
             )
             Text(
                 when (item.dealType) {
