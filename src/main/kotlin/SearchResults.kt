@@ -35,7 +35,7 @@ fun SubscriptionEditor(modifier: Modifier) {
             )
         }.body<SearchResponse>()
     }
-    Column(Modifier.background(darkGray)) {
+    Column(modifier.background(darkGray)) {
         Row(
             Modifier.padding(grid * 2),
             horizontalArrangement = Arrangement.spacedBy(grid * 2),
