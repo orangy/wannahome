@@ -32,6 +32,7 @@ val query = RealEstateQuery(
     pageSize = 100
 )
 
+// https://www.myhome.ge/en/s/?Keyword=%E1%83%97%E1%83%91%E1%83%98%E1%83%9A%E1%83%98%E1%83%A1%E1%83%98&AdTypeID=1&Page=2&regions=4&districts=38&cities=1&Ajax=1
 // https://api-gateway.ss.ge/v1/RealEstate/details?applicationId=28112287&updateViewCount=true
 
 
@@ -57,7 +58,7 @@ fun App() {
     }
 
     MaterialTheme(colorScheme = if (!isSystemInDarkTheme()) LightColors else DarkColors) {
-        Column {
+        Column(Modifier.background(MaterialTheme.colorScheme.background)) {
             items?.let { items ->
                 LazyColumn(
                     Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.background).padding(8.dp),
