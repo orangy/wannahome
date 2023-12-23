@@ -5,7 +5,7 @@ import java.io.*
 
 fun generateImageLoader(): ImageLoader = ImageLoader {
     components {
-        setupDefaultComponents()
+        setupDefaultComponents { httpClient }
     }
     interceptor {
         // cache 100 success image result, without bitmap

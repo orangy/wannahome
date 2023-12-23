@@ -1,4 +1,7 @@
 import androidx.compose.material3.*
+import androidx.compose.ui.unit.*
+
+val grid = 3.dp
 
 val LightColors = lightColorScheme(
     primary = md_theme_light_primary,

@@ -34,13 +34,13 @@ data class Bedrooms(
 )
 
 @Serializable
-data class RealEstateResponse(
-    val realStateItemModel: List<RealEstateItem>,
+data class SearchResponse(
+    val realStateItemModel: List<SearchItem>,
     val totalCount: Int
 )
 
 @Serializable
-data class RealEstateItem(
+data class SearchItem(
     val applicationId: Int,
     val status: Int,
     val address: Address,
@@ -50,7 +50,7 @@ data class RealEstateItem(
     val title: String,
     val shortTitle: String,
     val description: String?,
-    val totalArea: Double,
+    val totalArea: Double?,
     val totalAmountOfFloor: Double,
     val floorNumber: String,
     val numberOfBedrooms: Int,
