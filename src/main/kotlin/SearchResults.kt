@@ -100,16 +100,6 @@ fun <T : Enum<T>> EnumTypeChip(
             }
         }, trailingIcon = {
             Icon(Icons.Default.ArrowDropDown, contentDescription = "Select Deal Type")
-        }, leadingIcon = if (value != any) {
-            {
-                Icon(
-                    imageVector = Icons.Default.Done,
-                    contentDescription = null,
-                    modifier = Modifier.size(FilterChipDefaults.IconSize)
-                )
-            }
-        } else {
-            null
         })
 }
 
