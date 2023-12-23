@@ -2,35 +2,42 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RealEstateQuery(
-    val realEstateType: Int,
-    val realEstateDealType: Int,
-    val cityIdList: List<Int>,
-    val subdistrictIds: List<Int>,
-    val areaFrom: Int,
-    val currencyId: Int,
-    val priceType: Int,
-    val priceFrom: Int,
-    val priceTo: Int,
-    val rooms: List<Int>,
-    val advancedSearch: AdvancedSearch,
-    val page: Int,
-    val pageSize: Int
+    val realEstateType: Int? = null,
+    val realEstateDealType: Int? = null,
+    val currencyId: Int = 2, // 1 GEL, 2 USD
+    val page: Int = 1, // 1 total, 2 per m2
+    val pageSize: Int = 100,
+
+    val cityIdList: List<Int>? = null,
+    val subdistrictIds: List<Int>? = null,
+    val streetIds: List<Int>? = null,
+    val rooms: List<Int>? = null,
+    val priceType: Int? = null,
+    val priceFrom: Int? = null,
+    val priceTo: Int? = null,
+    val areaFrom: Int? = null,
+    val areaTo: Int? = null,
+    val advancedSearch: AdvancedSearch = AdvancedSearch(),
 )
 
 @Serializable
 data class AdvancedSearch(
-    val floor: Floor,
-    val bedrooms: Bedrooms
+    val floorTypes: List<Int>? = null,
+    val toilets: List<Int>? = null,
+    val balcony_Loggias: List<Int>? = null,
+    val floor: Range? = null,
+    val bedrooms: Range? = null,
+    val kitchenArea: Range? = null,
+    val totalArea: Range? = null,
+    val withImageOnly: Boolean? = null,
+    val heating: Boolean? = null,
+    val isConfirmed: Boolean? = null,
 )
 
 @Serializable
-data class Floor(
-    val from: Int
-)
-
-@Serializable
-data class Bedrooms(
-    val from: Int
+data class Range(
+    val from: Int? = null,
+    val to: Int? = null,
 )
 
 @Serializable
@@ -51,7 +58,7 @@ data class SearchItem(
     val shortTitle: String,
     val description: String?,
     val totalArea: Double?,
-    val totalAmountOfFloor: Double,
+    val totalAmountOfFloor: Double?,
     val floorNumber: String,
     val numberOfBedrooms: Int,
     val type: Int,
@@ -61,7 +68,7 @@ data class SearchItem(
     val isUrgent: Boolean,
     val vipStatus: Int,
     val hasRemoteViewing: Boolean,
-    val videoLink: String?, 
+    val videoLink: String?,
     val commercialRealEstateType: Int,
     val orderDate: String,
     val createDate: String,
@@ -72,9 +79,9 @@ data class SearchItem(
     val isUserHidden: Boolean,
     val isConfirmed: Boolean,
     val detailUrl: String,
-    val homeId: String?, 
-    val userInfo: UserInfo?, 
-    val similarityGroup: String? 
+    val homeId: String?,
+    val userInfo: UserInfo?,
+    val similarityGroup: String?
 )
 
 @Serializable
@@ -86,8 +93,8 @@ data class UserInfo(
 
 @Serializable
 data class Address(
-    val municipalityId: Int?, 
-    val municipalityTitle: String?, 
+    val municipalityId: Int?,
+    val municipalityTitle: String?,
     val cityId: Int,
     val cityTitle: String,
     val districtId: Int?,
@@ -101,11 +108,11 @@ data class Address(
 
 @Serializable
 data class Price(
-    val priceGeo: Int,
-    val unitPriceGeo: Int,
-    val priceUsd: Int,
-    val unitPriceUsd: Int,
-    val currencyType: Int
+    val priceGeo: Int? = null,
+    val unitPriceGeo: Int? = null,
+    val priceUsd: Int? = null,
+    val unitPriceUsd: Int? = null,
+    val currencyType: Int? = null
 )
 
 @Serializable
@@ -113,7 +120,7 @@ data class ImageFile(
     val fileName: String,
     val isMain: Boolean,
     val is360: Boolean,
-    val orderNo: Int,
+    val orderNo: Int? = null,
     val imageType: Int,
     val fileNameThumb: String? = null,
 )
@@ -135,8 +142,8 @@ data class Description(
     val en: String?,
     val ru: String?,
     val allLanguageTogather: String?,
-    val serializedText: String?, 
-    val text: String? 
+    val serializedText: String?,
+    val text: String?
 )
 
 @Serializable
@@ -250,13 +257,13 @@ data class RealStateDetails(
 
 @Serializable
 data class MapInfo(
-    val subway_station: String?, 
+    val subway_station: String?,
     val supermarket: Int,
     val school: Int,
     val park: Int,
     val pharmacy: Int,
-    val mapScreen: String?, 
-    val isMapmarker: String? 
+    val mapScreen: String?,
+    val isMapmarker: String?
 )
 
 @Serializable
@@ -290,7 +297,7 @@ data class Props(
 
 @Serializable
 data class PageProps(
-    val session: String?, 
+    val session: String?,
     val locations: Locations,
     val credentialsToken: String?,
     val appLocale: String?,

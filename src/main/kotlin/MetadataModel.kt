@@ -1,11 +1,11 @@
 import androidx.compose.runtime.*
 
-class MetadataModel {
+object MetadataModel {
     var raw by mutableStateOf<Metadata?>(null)
 
     val cities by derivedStateOf {
-        raw?.props?.pageProps?.locations?.visibleCities?.associate { city ->
-            city.cityId to city.cityTitle
+        raw?.props?.pageProps?.locations?.municipalityChain?.flatMap { it.cities ?: emptyList() }?.associate {
+            it.id to it.title
         } ?: emptyMap()
     }
 
@@ -29,7 +29,7 @@ class MetadataModel {
     }
 
     val municipality by derivedStateOf {
-        metadata.raw?.props?.pageProps?.locations?.municipalityChain?.associate {
+        raw?.props?.pageProps?.locations?.municipalityChain?.associate {
             it.municipalityId to it.municipalityTitle
         } ?: emptyMap()
     }
@@ -40,4 +40,3 @@ data class CityModel(
     val title: String,
 )
 
-val metadata = MetadataModel()

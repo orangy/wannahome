@@ -28,15 +28,19 @@ fun SearchItemCard(item: SearchItem, modifier: Modifier = Modifier) {
     ) {
         Row {
             ProvideTextStyle(MaterialTheme.typography.bodyMedium) {
+                val area =
+                    MetadataModel.subdistricts[item.address.subdistrictId]
+                        ?: MetadataModel.cities[item.address.cityId]
+                        ?: MetadataModel.municipality[item.address.municipalityId] ?: "Unknown"
                 val address = listOfNotNull(
-                    metadata.streets[item.address.streetId], item.address.streetNumber
+                    MetadataModel.streets[item.address.streetId], item.address.streetNumber
                 ).joinToString()
                 Row(
                     Modifier.clip(RoundedCornerShape(grid * 2)).background(
                         if (isHovered) darkGray else paleGray
                     ).alignByBaseline()
                 ) {
-                    metadata.subdistricts[item.address.subdistrictId]?.let { district ->
+                    area.let { area ->
                         Row(
                             Modifier.clip(RoundedCornerShape(grid * 2))
                                 .background(MaterialTheme.colorScheme.primaryContainer).padding(grid * 4, grid * 2)
@@ -44,14 +48,16 @@ fun SearchItemCard(item: SearchItem, modifier: Modifier = Modifier) {
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(Icons.Default.LocationOn, contentDescription = "Location")
-                            Text(text = district, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                            Text(text = area, color = MaterialTheme.colorScheme.onPrimaryContainer)
                         }
                     }
-                    Box(
-                        Modifier.height(IntrinsicSize.Max).padding(grid * 4, grid * 2).alignByBaseline(),
-                        contentAlignment = Alignment.CenterStart
-                    ) {
-                        Text(text = address, color = MaterialTheme.colorScheme.primary)
+                    if (address.isNotBlank()) {
+                        Box(
+                            Modifier.height(IntrinsicSize.Max).padding(grid * 4, grid * 2).alignByBaseline(),
+                            contentAlignment = Alignment.CenterStart
+                        ) {
+                            Text(text = address, color = MaterialTheme.colorScheme.primary)
+                        }
                     }
                 }
                 //Spacer(Modifier.weight(1f))
@@ -79,10 +85,17 @@ fun SearchItemCard(item: SearchItem, modifier: Modifier = Modifier) {
                         withStyle(SpanStyle(color = Color.LightGray)) {
                             append(" • ")
                         }
-                        append("${item.floorNumber}/${item.totalAmountOfFloor.toInt()} fl")
+                        if (item.floorNumber.isNotEmpty() && item.totalAmountOfFloor != null) {
+                            append("${item.floorNumber}/${item.totalAmountOfFloor.toInt()} fl")
+                        }
                     }
 
-                    Text(info, color = MaterialTheme.colorScheme.onBackground, overflow = TextOverflow.Ellipsis, maxLines = 1)
+                    Text(
+                        info,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
                 }
             }
         }
@@ -98,10 +111,32 @@ fun SearchItemCard(item: SearchItem, modifier: Modifier = Modifier) {
             }
         }
 
-        Text(
-            text = "\$${String.format("%,d", item.price.priceUsd)}",
-            color = MaterialTheme.colorScheme.onBackground,
-            style = MaterialTheme.typography.titleLarge
-        )
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(grid * 2),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = if (item.price.priceUsd != null) "\$${
+                    String.format(
+                        "%,d",
+                        item.price.priceUsd
+                    )
+                }" else "Negotiable",
+                color = MaterialTheme.colorScheme.onBackground,
+                style = MaterialTheme.typography.titleLarge,
+            )
+            Text(
+                when (item.dealType) {
+                    1 -> "for lease"
+                    2 -> "for rent"
+                    3 -> "for daily rent"
+                    4 -> "for sale"
+                    else -> ""
+                },
+                color = Color.Gray,
+                style = MaterialTheme.typography.titleSmall,
+            )
+        }
     }
 }

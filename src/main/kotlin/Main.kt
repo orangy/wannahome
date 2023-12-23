@@ -24,7 +24,8 @@ val query = RealEstateQuery(
     priceTo = 100000,
     rooms = listOf(2, 3),
     advancedSearch = AdvancedSearch(
-        floor = Floor(from = 2), bedrooms = Bedrooms(from = 1)
+        floor = Range(from = 2), 
+        bedrooms = Range(from = 1)
     ),
     page = 1,
     pageSize = 100
@@ -33,6 +34,7 @@ val query = RealEstateQuery(
 // https://www.myhome.ge/en/s/?Keyword=%E1%83%97%E1%83%91%E1%83%98%E1%83%9A%E1%83%98%E1%83%A1%E1%83%98&AdTypeID=1&Page=2&regions=4&districts=38&cities=1&Ajax=1
 // https://api-gateway.ss.ge/v1/RealEstate/details?applicationId=28112287&updateViewCount=true
 
+// Count results: https://api-gateway.ss.ge/v2/RealEstate/LegendSearchCount
 
 fun main() = application {
     Window(
@@ -47,7 +49,7 @@ fun main() = application {
                 val metadataJson =
                     mainPage.substringAfterLast("<script id=\"__NEXT_DATA__\" type=\"application/json\">")
                         .substringBefore("</script></body></html>")
-                metadata.raw = json.decodeFromString<Metadata>(metadataJson)
+                MetadataModel.raw = json.decodeFromString<Metadata>(metadataJson)
                 httpClient.post("https://home.ss.ge/api/refresh_access_token").bodyAsText()
                 val cookies = httpClient.cookies("https://home.ss.ge")
                 val token = cookies["ss-session-token"]
@@ -56,7 +58,7 @@ fun main() = application {
                     header("Accept-Language", "en")
                     header("Authorization", "Bearer ${token?.value}")
                     contentType(ContentType.Application.Json)
-                    setBody(query)
+                    setBody(RealEstateQuery())
                 }.body<SearchResponse>()
             }
 
