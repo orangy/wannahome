@@ -8,6 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.*
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.style.*
@@ -58,8 +59,8 @@ fun SearchItemCard(item: SearchItem, modifier: Modifier = Modifier) {
                     Modifier.height(IntrinsicSize.Max).padding(grid * 4, grid * 2).alignByBaseline(),
                     horizontalArrangement = Arrangement.spacedBy(grid * 2)
                 ) {
-                    item.totalArea?.let { area ->
-                        Text(text = buildAnnotatedString {
+                    val info = buildAnnotatedString {
+                        item.totalArea?.let { area ->
                             append(if (area % 1 == 0.0) "${area.toInt()} m" else String.format("%.1f m", area))
                             withStyle(
                                 SpanStyle(
@@ -70,24 +71,21 @@ fun SearchItemCard(item: SearchItem, modifier: Modifier = Modifier) {
                             ) {
                                 append("2")
                             }
-                        }, color = MaterialTheme.colorScheme.onBackground)
-                        Text(text = "•", color = MaterialTheme.colorScheme.secondary)
+                            withStyle(SpanStyle(color = Color.LightGray)) {
+                                append(" • ")
+                            }
+                        }
+                        append("${item.floorNumber}/${item.totalAmountOfFloor.toInt()} fl")
+                        withStyle(SpanStyle(color = Color.LightGray)) {
+                            append(" • ")
+                        }
+                        append("${item.numberOfBedrooms} bds")
                     }
-                    Text(
-                        text = "${item.floorNumber}/${item.totalAmountOfFloor.toInt()} fl",
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                    Text(text = "•", color = MaterialTheme.colorScheme.secondary)
-                    Text(text = "${item.numberOfBedrooms} bds", color = MaterialTheme.colorScheme.onBackground)
+
+                    Text(info, color = MaterialTheme.colorScheme.onBackground, overflow = TextOverflow.Ellipsis, maxLines = 1)
                 }
             }
         }
-
-        Text(
-            text = "${item.price.priceUsd}$",
-            color = MaterialTheme.colorScheme.onBackground,
-            style = MaterialTheme.typography.labelLarge
-        )
 
         Row(horizontalArrangement = Arrangement.spacedBy(grid * 2)) {
             item.appImages.forEach { image ->
@@ -99,5 +97,11 @@ fun SearchItemCard(item: SearchItem, modifier: Modifier = Modifier) {
                 )
             }
         }
+
+        Text(
+            text = "${String.format("%,d", item.price.priceUsd)}$",
+            color = MaterialTheme.colorScheme.onBackground,
+            style = MaterialTheme.typography.titleLarge
+        )
     }
 }
