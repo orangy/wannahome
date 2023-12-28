@@ -16,26 +16,22 @@ repositories {
 }
 
 dependencies {
-    // Note, if you develop a library, you should use compose.desktop.common.
-    // compose.desktop.currentOs should be used in launcher-sourceSet
-    // (in a separate module for demo project and in testMain).
-    // With compose.desktop.common you will also lose @Preview functionality
     implementation(compose.desktop.currentOs)
     implementation(compose.material3)
     implementation(libs.composeImageLoader)
     implementation(libs.kotlinx.coroutines.core)
-    
+
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.client.logging)
+    implementation(libs.ktor.client.logging.jvm)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.client.cio)
-    
+    implementation(libs.ktor.client.encoding)
+
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.datetime)
-    implementation("io.ktor:ktor-client-auth:2.3.7")
-    implementation("io.ktor:ktor-client-encoding:2.3.7")
-    implementation("io.ktor:ktor-client-logging-jvm:2.3.7")
+    implementation("org.jetbrains.xodus:xodus-openAPI:2.0.1")
 
 }
 

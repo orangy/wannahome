@@ -3,12 +3,18 @@ import kotlinx.serialization.Serializable
 
 object SubscriptionModel {
     var subscriptions = mutableStateListOf<Subscription>()
-    var activeSubscription by mutableStateOf<Subscription?>(null)
+    var activeSubscription by mutableStateOf<Subscription?>(null, referentialEqualityPolicy())
 }
 
 data class Subscription(
-    val dealType : DealType,
-    val propertyType : PropertyType,
+    val dealType: DealType,
+    val propertyType: PropertyType,
+    val price: Range = Range(),
+)
+
+data class Range(
+    val from: Int? = null,
+    val to: Int? = null
 )
 
 @Serializable

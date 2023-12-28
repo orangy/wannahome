@@ -1,7 +1,7 @@
 import androidx.compose.runtime.*
 
 object MetadataModel {
-    var raw by mutableStateOf<Metadata?>(null)
+    var raw by mutableStateOf<SSMetadata?>(null)
 
     val cities by derivedStateOf {
         raw?.props?.pageProps?.locations?.municipalityChain?.flatMap { it.cities ?: emptyList() }?.associate {

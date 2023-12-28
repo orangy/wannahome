@@ -17,7 +17,7 @@ import io.ktor.http.*
 fun SubscriptionEditor(modifier: Modifier) {
     val subscriptionState = remember { mutableStateOf(Subscription(DealType.Any, PropertyType.Any)) }
     var subscription by subscriptionState
-    var items by remember<MutableState<SearchResponse?>> { mutableStateOf(null) }
+    var items by remember<MutableState<SSResponse?>> { mutableStateOf(null) }
     LaunchedEffect(subscriptionState.value) {
         httpClient.post("https://home.ss.ge/api/refresh_access_token").bodyAsText()
         val cookies = httpClient.cookies("https://home.ss.ge")
@@ -28,12 +28,12 @@ fun SubscriptionEditor(modifier: Modifier) {
             header("Authorization", "Bearer ${token?.value}")
             contentType(ContentType.Application.Json)
             setBody(
-                RealEstateQuery(
+                SSQuery(
                     realEstateDealType = if (subscription.dealType == DealType.Any) null else subscription.dealType.value,
                     realEstateType = if (subscription.propertyType == PropertyType.Any) null else subscription.propertyType.value,
                 )
             )
-        }.body<SearchResponse>()
+        }.body<SSResponse>()
     }
     Column(modifier.background(darkGray)) {
         Row(
@@ -104,7 +104,7 @@ fun <T : Enum<T>> EnumTypeChip(
 }
 
 @Composable
-fun SearchResults(items: SearchResponse?, modifier: Modifier = Modifier) {
+fun SearchResults(items: SSResponse?, modifier: Modifier = Modifier) {
     Column(modifier.background(MaterialTheme.colorScheme.background)) {
         items?.let { items ->
             LazyColumn(

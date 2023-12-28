@@ -6,13 +6,10 @@ import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.window.*
 import com.seiko.imageloader.*
-import io.ktor.client.call.*
-import io.ktor.client.plugins.cookies.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
-import io.ktor.http.*
 
-val query = RealEstateQuery(
+val query = SSQuery(
     realEstateType = 5,
     realEstateDealType = 4,
     cityIdList = listOf(95),
@@ -23,9 +20,9 @@ val query = RealEstateQuery(
     priceFrom = 50000,
     priceTo = 100000,
     rooms = listOf(2, 3),
-    advancedSearch = AdvancedSearch(
-        floor = Range(from = 2), 
-        bedrooms = Range(from = 1)
+    advancedSearch = SSAdvancedQuery(
+        floor = SSRange(from = 2), 
+        bedrooms = SSRange(from = 1)
     ),
     page = 1,
     pageSize = 100
@@ -48,13 +45,13 @@ fun main() = application {
                 val metadataJson =
                     mainPage.substringAfterLast("<script id=\"__NEXT_DATA__\" type=\"application/json\">")
                         .substringBefore("</script></body></html>")
-                MetadataModel.raw = json.decodeFromString<Metadata>(metadataJson)
+                MetadataModel.raw = json.decodeFromString<SSMetadata>(metadataJson)
 
             }
 
             MaterialTheme(colorScheme = if (!isSystemInDarkTheme()) LightColors else DarkColors) {
                 Row {
-                    SideBar(Modifier.width(200.dp))
+                    SideBar(Modifier.width(300.dp))
                     
                     SubscriptionEditor(Modifier.weight(1f))
                 }

@@ -1,7 +1,7 @@
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RealEstateQuery(
+data class SSQuery(
     val realEstateType: Int? = null,
     val realEstateDealType: Int? = null,
     val currencyId: Int = 2, // 1 GEL, 2 USD
@@ -17,42 +17,42 @@ data class RealEstateQuery(
     val priceTo: Int? = null,
     val areaFrom: Int? = null,
     val areaTo: Int? = null,
-    val advancedSearch: AdvancedSearch = AdvancedSearch(),
+    val advancedSearch: SSAdvancedQuery = SSAdvancedQuery(),
 )
 
 @Serializable
-data class AdvancedSearch(
+data class SSAdvancedQuery(
     val floorTypes: List<Int>? = null,
     val toilets: List<Int>? = null,
     val balcony_Loggias: List<Int>? = null,
-    val floor: Range? = null,
-    val bedrooms: Range? = null,
-    val kitchenArea: Range? = null,
-    val totalArea: Range? = null,
+    val floor: SSRange? = null,
+    val bedrooms: SSRange? = null,
+    val kitchenArea: SSRange? = null,
+    val totalArea: SSRange? = null,
     val withImageOnly: Boolean? = null,
     val heating: Boolean? = null,
     val isConfirmed: Boolean? = null,
 )
 
 @Serializable
-data class Range(
+data class SSRange(
     val from: Int? = null,
     val to: Int? = null,
 )
 
 @Serializable
-data class SearchResponse(
-    val realStateItemModel: List<SearchItem>,
+data class SSResponse(
+    val realStateItemModel: List<SSResponseItem>,
     val totalCount: Int
 )
 
 @Serializable
-data class SearchItem(
+data class SSResponseItem(
     val applicationId: Int,
     val status: Int,
-    val address: Address,
-    val price: Price,
-    val appImages: List<ImageFile>,
+    val address: SSAddress,
+    val price: SSPrice,
+    val appImages: List<SSImage>,
     val imageCount: Int,
     val title: String,
     val shortTitle: String,
@@ -80,19 +80,19 @@ data class SearchItem(
     val isConfirmed: Boolean,
     val detailUrl: String,
     val homeId: String?,
-    val userInfo: UserInfo?,
+    val userInfo: SSUserInfo?,
     val similarityGroup: String?
 )
 
 @Serializable
-data class UserInfo(
+data class SSUserInfo(
     val name: String,
     val image: String,
     val userType: Int
 )
 
 @Serializable
-data class Address(
+data class SSAddress(
     val municipalityId: Int?,
     val municipalityTitle: String?,
     val cityId: Int,
@@ -107,7 +107,7 @@ data class Address(
 )
 
 @Serializable
-data class Price(
+data class SSPrice(
     val priceGeo: Int? = null,
     val unitPriceGeo: Int? = null,
     val priceUsd: Int? = null,
@@ -116,7 +116,7 @@ data class Price(
 )
 
 @Serializable
-data class ImageFile(
+data class SSImage(
     val fileName: String,
     val isMain: Boolean,
     val is360: Boolean,
@@ -126,7 +126,7 @@ data class ImageFile(
 )
 
 @Serializable
-data class ApplicationPhones(
+data class SSPhone(
     val applicationPhoneId: Int,
     val applicationId: Int,
     val phoneNumber: String,
@@ -137,7 +137,7 @@ data class ApplicationPhones(
 )
 
 @Serializable
-data class Description(
+data class SSDescription(
     val ka: String?,
     val en: String?,
     val ru: String?,
@@ -147,15 +147,15 @@ data class Description(
 )
 
 @Serializable
-data class RealStateDetails(
+data class SSDetails(
     val applicationId: Int,
     val isInactiveApplication: Boolean,
-    val address: Address,
-    val price: Price,
-    val appImages: List<ImageFile>,
-    val applicationPhones: List<ApplicationPhones>,
+    val address: SSAddress,
+    val price: SSPrice,
+    val appImages: List<SSImage>,
+    val applicationPhones: List<SSPhone>,
     val title: String,
-    val description: Description,
+    val description: SSDescription,
     val status: String,
     val realEstateType: String,
     val realEstateTypeId: Int,
@@ -183,7 +183,7 @@ data class RealStateDetails(
     val comment: String?,
     val blockReason: String?,
     val contactPerson: String,
-    val mapInfo: MapInfo,
+    val mapInfo: SSMapInfo,
     val cadastralCode: String?,
     val hasRemoteViewing: Boolean,
     val isForUkraine: Boolean,
@@ -249,14 +249,14 @@ data class RealStateDetails(
     val commercialType: Int,
     val commercialTypeText: String?,
     val userApplicationCount: Int,
-    val mortgagePercentages: MortgagePercentages,
+    val mortgagePercentages: SSMortgage,
     val priceLevel: String,
     val metaTitle: String,
     val similarityGroup: String?
 )
 
 @Serializable
-data class MapInfo(
+data class SSMapInfo(
     val subway_station: String?,
     val supermarket: Int,
     val school: Int,
@@ -267,7 +267,7 @@ data class MapInfo(
 )
 
 @Serializable
-data class MortgagePercentages(
+data class SSMortgage(
     val bogNominal: String,
     val bogEffective: String,
     val tbcNominal: String,
@@ -277,8 +277,8 @@ data class MortgagePercentages(
 )
 
 @Serializable
-data class Metadata(
-    val props: Props,
+data class SSMetadata(
+    val props: SSMetadataProps,
     val page: String?,
     val buildId: String?,
     val isFallback: Boolean?,
@@ -291,14 +291,14 @@ data class Metadata(
 )
 
 @Serializable
-data class Props(
-    val pageProps: PageProps,
+data class SSMetadataProps(
+    val pageProps: SSPageProps,
 )
 
 @Serializable
-data class PageProps(
+data class SSPageProps(
     val session: String?,
-    val locations: Locations,
+    val locations: SSLocations,
     val credentialsToken: String?,
     val appLocale: String?,
     val hiddenApplications: List<Int>?,
@@ -309,42 +309,42 @@ data class PageProps(
 )
 
 @Serializable
-data class Locations(
-    val visibleCities: List<VisibleCity>,
-    val visibleMunicipalitetyChain: List<Municipality>?,
-    val municipalityChain: List<Municipality>?
+data class SSLocations(
+    val visibleCities: List<SSVisibleCity>,
+    val visibleMunicipalitetyChain: List<SSMunicipality>?,
+    val municipalityChain: List<SSMunicipality>?
 )
 
 @Serializable
-data class VisibleCity(
+data class SSVisibleCity(
     val cityId: Int,
     val cityTitle: String,
     val latitude: Double?,
     val longitude: Double?,
-    val districts: List<District>
+    val districts: List<SSDistrict>
 )
 
 @Serializable
-data class District(
+data class SSDistrict(
     val districtId: Int,
     val districtTitle: String,
     val latitude: Double?,
     val longitude: Double?,
-    val subDistricts: List<SubDistrict>
+    val subDistricts: List<SSSubDistrict>
 )
 
 @Serializable
-data class SubDistrict(
+data class SSSubDistrict(
     val subDistrictId: Int,
     val subDistrictTitle: String,
     val subDistrictTitleSeo: String,
     val latitude: Double?,
     val longitude: Double?,
-    val streets: List<Street>
+    val streets: List<SSStreet>
 )
 
 @Serializable
-data class Street(
+data class SSStreet(
     val streetId: Int,
     val streetTitle: String,
     val latitude: Double?,
@@ -352,7 +352,7 @@ data class Street(
 )
 
 @Serializable
-data class City(
+data class SSCity(
     val id: Int,
     val title: String?,
     val latitude: Double?,
@@ -360,10 +360,10 @@ data class City(
 )
 
 @Serializable
-data class Municipality(
+data class SSMunicipality(
     val municipalityId: Int,
     val municipalityTitle: String?,
     val latitude: Double?,
     val longitude: Double?,
-    val cities: List<City>?
+    val cities: List<SSCity>?
 )

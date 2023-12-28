@@ -13,10 +13,10 @@ import androidx.compose.ui.layout.*
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.style.*
 import androidx.compose.ui.unit.*
-import com.seiko.imageloader.*
+import com.seiko.imageloader.ui.*
 
 @Composable
-fun SearchItemCard(item: SearchItem, modifier: Modifier = Modifier) {
+fun SearchItemCard(item: SSResponseItem, modifier: Modifier = Modifier) {
     val interactionSource = remember { MutableInteractionSource() }
     val isHovered by interactionSource.collectIsHoveredAsState()
     Column(
@@ -102,8 +102,8 @@ fun SearchItemCard(item: SearchItem, modifier: Modifier = Modifier) {
 
         Row(horizontalArrangement = Arrangement.spacedBy(grid * 2)) {
             item.appImages.forEach { image ->
-                Image(
-                    rememberImagePainter(image.fileName),
+                AutoSizeImage(
+                    image.fileName,
                     contentDescription = "Property Image",
                     modifier = Modifier.size(128.dp).clip(RoundedCornerShape(grid * 2)),
                     contentScale = ContentScale.Crop,
